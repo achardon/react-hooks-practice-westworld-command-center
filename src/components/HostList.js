@@ -4,9 +4,11 @@ import Host from "./Host";
 
 function HostList( {hosts, selectedHost, setSelectedHost, selectHost} ) {
 
+  const hostsInColdStorage = hosts.filter(host => !host.active)
+
   return (
     <Card.Group itemsPerRow={6}>{/* What do you think, partner? */}
-      {hosts.map(host => <Host key={host.id} host={host} selectedHost={selectedHost} selectHost={selectHost} />)}
+      {hostsInColdStorage.map(host => <Host key={host.id} host={host} selectedHost={selectedHost} selectHost={selectHost} />)}
     
     </Card.Group>
   );

@@ -13,7 +13,7 @@ function Area( {area, hosts, selectHost} ) {
   }
   finishedName = splitName.join(' ')
 
-  const hostsInThisArea = hosts.filter(host => host.area === area.name)
+  const hostsInThisArea = hosts.filter(host => host.area === area.name && host.active)
 
   return (
     <div

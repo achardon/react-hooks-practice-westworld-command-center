@@ -37,10 +37,12 @@ function HostInfo( {selectedHost, areas, hosts, setHosts} ) {
   
   const [value, setValue] = useState(selectedHost.area);
   // let value = selectedHost.area
+  const [active, setActive] = useState(selectedHost.active);
 
   useEffect(() => {
     setValue(selectedHost.area)
-  },[selectedHost])
+    setActive(selectedHost.active)
+  },[selectedHost, hosts])
 
   function handleOptionChange(e, { value }) {
     // the 'value' attribute is given via Semantic's Dropdown component.
@@ -70,6 +72,28 @@ function HostInfo( {selectedHost, areas, hosts, setHosts} ) {
 
   function handleRadioChange() {
     console.log("The radio button fired");
+    const updatedActive = !active
+    fetch(`http://localhost:3001/hosts/${selectedHost.id}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({...selectedHost, active: updatedActive})
+    })
+    .then(r => r.json())
+    .then(data => {
+      const updatedHosts = hosts.map(host => {
+        if (host.id === selectedHost.id) {
+          return data
+        }
+        else {
+          return host
+        }
+      })
+      setHosts(updatedHosts)
+      console.log(updatedActive)
+      setActive(updatedActive)
+    })
   }
 
   return (
@@ -93,8 +117,8 @@ function HostInfo( {selectedHost, areas, hosts, setHosts} ) {
               {/* Checked takes a boolean and determines what position the switch is in. Should it always be true? */}
               <Radio
                 onChange={handleRadioChange}
-                label={"Active"}
-                checked={true}
+                label={active? "Active" : "Decommissioned"}
+                checked={active? true : false}
                 slider
               />
             </Card.Meta>
