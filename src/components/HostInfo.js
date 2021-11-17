@@ -10,7 +10,7 @@ import {
 } from "semantic-ui-react";
 import "../stylesheets/HostInfo.css";
 
-function HostInfo( {selectedHost, areas} ) {
+function HostInfo( {selectedHost, areas, hosts, setHosts} ) {
   // This state is just to show how the dropdown component works.
   // Options have to be formatted in this way (array of objects with keys of: key, text, value)
   // Value has to match the value in the object to render the right text.
@@ -47,6 +47,25 @@ function HostInfo( {selectedHost, areas} ) {
     // Put a debugger or console.log in here and see what the "value" variable is when you pass in different options.
     // See the Semantic docs for more info: https://react.semantic-ui.com/modules/dropdown/#usage-controlled
     setValue(value)
+    fetch(`http://localhost:3001/hosts/${selectedHost.id}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({...selectedHost, area: value})
+    })
+    .then(r => r.json())
+    .then(data => {
+      const updatedHosts = hosts.map(host => {
+        if (host.id === selectedHost.id) {
+          return data
+        }
+        else {
+          return host
+        }
+      })
+      setHosts(updatedHosts)
+    })
   }
 
   function handleRadioChange() {

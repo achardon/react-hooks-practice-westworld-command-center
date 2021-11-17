@@ -1,7 +1,8 @@
 import React from "react";
 import "../stylesheets/Area.css";
+import Host from './Host';
 
-function Area( {area, hosts} ) {
+function Area( {area, hosts, selectHost} ) {
 
   //capitalize first letter of each area
   const areaName = area.name
@@ -12,6 +13,7 @@ function Area( {area, hosts} ) {
   }
   finishedName = splitName.join(' ')
 
+  const hostsInThisArea = hosts.filter(host => host.area === area.name)
 
   return (
     <div
@@ -23,6 +25,7 @@ function Area( {area, hosts} ) {
         {finishedName}
       </h3>
       {/* See Checkpoint 1 item 2 in the Readme for a clue as to what goes here */}
+      {hostsInThisArea.map(host => <Host key={host.id} host={host} selectHost={selectHost}/>)}
     </div>
   );
 }
