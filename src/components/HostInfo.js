@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Radio,
   Icon,
@@ -10,23 +10,43 @@ import {
 } from "semantic-ui-react";
 import "../stylesheets/HostInfo.css";
 
-function HostInfo() {
+function HostInfo( {selectedHost, areas} ) {
   // This state is just to show how the dropdown component works.
   // Options have to be formatted in this way (array of objects with keys of: key, text, value)
   // Value has to match the value in the object to render the right text.
 
   // IMPORTANT: But whether it should be stateful or not is entirely up to you. Change this component however you like.
-  const [options] = useState([
-    { key: "some_area", text: "Some Area", value: "some_area" },
-    { key: "another_area", text: "Another Area", value: "another_area" },
-  ]);
+  // const [options] = useState([
+  //   { key: "some_area", text: "Some Area", value: "some_area" },
+  //   { key: "another_area", text: "Another Area", value: "another_area" },
+  // ]);
 
-  const [value] = useState("some_area");
+  function capitalizeName(name) {
+    let finishedName = name.replace('_', ' ')
+    let splitName = finishedName.split(' ')
+    for (let i = 0; i < splitName.length; i++) {
+      splitName[i] = splitName[i][0].toUpperCase() + splitName[i].substring(1);
+    }
+    finishedName = splitName.join(' ')
+    return finishedName
+  }
+  
+  const options = areas.map(area => {
+    return { key: area.name, text: capitalizeName(area.name), value: area.name}
+  })
+  
+  const [value, setValue] = useState(selectedHost.area);
+  // let value = selectedHost.area
+
+  useEffect(() => {
+    setValue(selectedHost.area)
+  },[selectedHost])
 
   function handleOptionChange(e, { value }) {
     // the 'value' attribute is given via Semantic's Dropdown component.
     // Put a debugger or console.log in here and see what the "value" variable is when you pass in different options.
     // See the Semantic docs for more info: https://react.semantic-ui.com/modules/dropdown/#usage-controlled
+    setValue(value)
   }
 
   function handleRadioChange() {
@@ -37,7 +57,7 @@ function HostInfo() {
     <Grid>
       <Grid.Column width={6}>
         <Image
-          src={/* pass in the right image here */ ""}
+          src={selectedHost.imageUrl}
           floated="left"
           size="small"
           className="hostImg"
@@ -47,8 +67,7 @@ function HostInfo() {
         <Card>
           <Card.Content>
             <Card.Header>
-              {"Bob"} | {true ? <Icon name="man" /> : <Icon name="woman" />}
-              {/* Think about how the above should work to conditionally render the right First Name and the right gender Icon */}
+              {selectedHost.firstName} | {selectedHost.gender === 'Male' ? <Icon name="man" /> : <Icon name="woman" />}
             </Card.Header>
             <Card.Meta>
               {/* Sometimes the label should take "Decommissioned". How are we going to conditionally render that? */}
