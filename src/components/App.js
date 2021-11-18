@@ -22,7 +22,6 @@ function App() {
     fetch(`http://localhost:3001/areas`)
     .then(r => r.json())
     .then(data => {
-      console.log(data)
       setAreas(data)
     })
   }, [])
@@ -31,7 +30,7 @@ function App() {
     setSelectedHost(host)
   }
 
-  console.log(hosts)
+  // console.log(hosts)
 
   return (
     <Segment id="app">

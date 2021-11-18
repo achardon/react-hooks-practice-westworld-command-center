@@ -13,7 +13,7 @@ function Headquarters( {hosts, setHosts, areas, selectHost, selectedHost, setSel
         <ColdStorage hosts={hosts} selectedHost={selectedHost} setSelectedHost={setSelectedHost} selectHost={selectHost}/>
       </Grid.Column>
       <Grid.Column width={5}>
-        <Details selectedHost={selectedHost} areas={areas} hosts={hosts} setHosts={setHosts}/>
+        <Details selectedHost={selectedHost} setSelectedHost={setSelectedHost} areas={areas} hosts={hosts} setHosts={setHosts}/>
       </Grid.Column>
       <Grid.Column width={3}>
         <LogPanel />
