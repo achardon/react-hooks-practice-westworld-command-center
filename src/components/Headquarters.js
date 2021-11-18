@@ -16,7 +16,7 @@ function Headquarters( {hosts, setHosts, areas, selectHost, selectedHost, setSel
         <Details selectedHost={selectedHost} setSelectedHost={setSelectedHost} areas={areas} hosts={hosts} setHosts={setHosts}/>
       </Grid.Column>
       <Grid.Column width={3}>
-        <LogPanel />
+        <LogPanel hosts={hosts} setHosts={setHosts}/>
       </Grid.Column>
     </Grid>
   );
