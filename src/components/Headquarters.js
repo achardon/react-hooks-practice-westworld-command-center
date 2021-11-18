@@ -1,11 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import { Grid } from "semantic-ui-react";
 import Details from "./Details";
 import "../stylesheets/Headquarters.css";
 import ColdStorage from './ColdStorage';
 import LogPanel from './LogPanel';
 
-function Headquarters( {hosts, setHosts, areas, selectHost, selectedHost, setSelectedHost, logs, setLogs} ) {
+function Headquarters( {hosts, setHosts, areas, selectHost, selectedHost, setSelectedHost} ) {
+
+  const [logs, setLogs] = useState([])
 
   return (
     <Grid celled="internally">

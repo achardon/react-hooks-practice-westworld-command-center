@@ -17,21 +17,21 @@ function LogPanel( {hosts, setHosts, logs, setLogs} ) {
         return host;
       })
       console.log(decomHosts)
-      
-        fetch(`http://localhost:3001/hosts`, {
-        method: "PATCH",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(decomHosts)
+      decomHosts.forEach(host => {
+        fetch(`http://localhost:3001/hosts/${host.id}`, {
+          method: "PATCH",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(host)
+        })
+        .then(r => r.json())
+        .then(data => {
+            console.log(data)
+          }) 
       })
-      .then(r => r.json())
-      .then(data => {
-          console.log(data)
-        }) 
-  
-    setHosts(decomHosts)
-    setLogs([Log.warn('Decommissiong all hosts.'), ...logs])
+      setHosts(decomHosts)
+      setLogs([Log.warn('Decommissiong all hosts.'), ...logs])
     }
 
     if (!activateAll) {
@@ -41,19 +41,31 @@ function LogPanel( {hosts, setHosts, logs, setLogs} ) {
       })
       console.log(activatedHosts)
       console.log('inside if statement')
-      //HOW DOES THIS PART WORK? I tried doing a fetch with activatedHosts.map, but it kept throwing an error (even though it appeared to be working at first)... too many fetch requests at once??
-        fetch(`http://localhost:3001/hosts`, {
-        method: "PATCH",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(activatedHosts)
-      })
-      .then(r => r.json())
-      .then(data => {
-          console.log(data)
-        }) 
-      
+      //HOW DOES THIS PART WORK? Right now it is doing a fetch with activatedHosts.forEach, but it only SOMETIMES is throwing an error (even though it appeared to be working at first)... too many fetch requests at once?? The error is "Unhandled Rejection (TypeError): Failed to fetch". I also tried the below to update all the hosts at one, but that threw a 404 error.
+      //   fetch(`http://localhost:3001/hosts`, {
+      //   method: "PATCH",
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify(activatedHosts)
+      // })
+      // .then(r => r.json())
+      // .then(data => {
+      //     console.log(data)
+      //   }) 
+        activatedHosts.forEach(host => {
+          fetch(`http://localhost:3001/hosts/${host.id}`, {
+            method: "PATCH",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(host)
+          })
+          .then(r => r.json())
+          .then(data => {
+              console.log(data)
+            }) 
+        })
       setHosts(activatedHosts)
       setLogs([Log.warn('Activating all hosts!'), ...logs])
 
