@@ -9,6 +9,7 @@ function App() {
   const [hosts, setHosts] = useState([])
   const [areas, setAreas] = useState([])
   const [selectedHost, setSelectedHost] = useState('')
+  const [logs, setLogs] = useState([])
 
   useEffect(() => {
     fetch(`http://localhost:3001/hosts`)
@@ -34,8 +35,8 @@ function App() {
 
   return (
     <Segment id="app">
-      <WestworldMap areas={areas} hosts={hosts} selectHost={selectHost}/>
-      <Headquarters areas={areas} hosts={hosts} setHosts={setHosts} selectHost={selectHost} selectedHost={selectedHost} setSelectedHost={setSelectedHost}/>
+      <WestworldMap areas={areas} hosts={hosts} selectHost={selectHost} logs={logs} />
+      <Headquarters areas={areas} hosts={hosts} setHosts={setHosts} selectHost={selectHost} selectedHost={selectedHost} setSelectedHost={setSelectedHost} logs={logs} setLogs={setLogs}/>
     </Segment>
   );
 }

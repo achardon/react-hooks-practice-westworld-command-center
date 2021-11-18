@@ -9,8 +9,10 @@ import {
   Divider,
 } from "semantic-ui-react";
 import "../stylesheets/HostInfo.css";
+import { Log } from "../services/Log";
 
-function HostInfo( {selectedHost, setSelectedHost, areas, hosts, setHosts} ) {
+
+function HostInfo( {selectedHost, setSelectedHost, areas, hosts, setHosts, logs, setLogs} ) {
   // This state is just to show how the dropdown component works.
   // Options have to be formatted in this way (array of objects with keys of: key, text, value)
   // Value has to match the value in the object to render the right text.
@@ -53,10 +55,11 @@ function HostInfo( {selectedHost, setSelectedHost, areas, hosts, setHosts} ) {
     const hostsAlreadyInArea = hosts.filter(host => host.area === value)
     const currentArea = areas.filter(area => area.name === value)
     if (hostsAlreadyInArea.length >= currentArea[0].limit) {
-      console.log('too many')
-      alert(
-        `HEY!! You got too many hosts in ${capitalizeName(currentArea[0].name)}. The limit for that area is ${currentArea[0].limit}. You gotta fix that!`
-      );
+      // console.log('too many')
+      // alert(
+      //   `HEY!! You got too many hosts in ${capitalizeName(currentArea[0].name)}. The limit for that area is ${currentArea[0].limit}. You gotta fix that!`
+      // );
+      setLogs([Log.error(`Too many hosts. Cannot add ${selectedHost.firstName} to ${capitalizeName(currentArea[0].name)}`), ...logs])
     }
     else {
       fetch(`http://localhost:3001/hosts/${selectedHost.id}`, {
@@ -78,6 +81,7 @@ function HostInfo( {selectedHost, setSelectedHost, areas, hosts, setHosts} ) {
         })
         setHosts(updatedHosts)
         setSelectedHost(data)
+        setLogs([Log.notify(`${selectedHost.firstName} set in area ${capitalizeName(currentArea[0].name)}`), ...logs])
       })
     }
   }
@@ -103,6 +107,13 @@ function HostInfo( {selectedHost, setSelectedHost, areas, hosts, setHosts} ) {
       })
       setHosts(updatedHosts)
       setSelectedHost(data)
+      if (updatedActive) {
+        setLogs([Log.warn(`Activated ${selectedHost.firstName}`), ...logs])
+      }
+      else {
+        setLogs([Log.warn(`Decommissioned ${selectedHost.firstName}`), ...logs])
+      }
+      
     })
   }
 
