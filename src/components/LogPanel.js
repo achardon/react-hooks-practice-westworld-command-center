@@ -13,19 +13,20 @@ function LogPanel( {hosts, setHosts} ) {
         host.active = false
         return host;
       })
-      decomHosts.map(host => {
-        fetch(`http://localhost:3001/hosts/${host.id}`, {
+      console.log(decomHosts)
+      
+        fetch(`http://localhost:3001/hosts`, {
         method: "PATCH",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(host)
+        body: JSON.stringify(decomHosts)
       })
       .then(r => r.json())
       .then(data => {
           console.log(data)
         }) 
-      })
+  
     setHosts(decomHosts)
     }
 
@@ -34,19 +35,21 @@ function LogPanel( {hosts, setHosts} ) {
         host.active = true;
         return host;
       })
-      activatedHosts.map(host => {
-        fetch(`http://localhost:3001/hosts/${host.id}`, {
+      console.log(activatedHosts)
+      console.log('inside if statement')
+      //HOW DOES THIS PART WORK? I tried doing a fetch with activatedHosts.map, but it kept throwing an error (even though it appeared to be working at first)... too many fetch requests at once??
+        fetch(`http://localhost:3001/hosts`, {
         method: "PATCH",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(host)
+        body: JSON.stringify(activatedHosts)
       })
       .then(r => r.json())
       .then(data => {
           console.log(data)
         }) 
-      })
+      
       setHosts(activatedHosts)
     }
     setActivateAll(!activateAll)

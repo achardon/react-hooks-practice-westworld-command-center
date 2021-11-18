@@ -15,8 +15,6 @@ function Area( {area, hosts, selectHost} ) {
 
   const hostsInThisArea = hosts.filter(host => host.area === area.name && host.active)
 
-  // console.log(area.name, hostsInThisArea)
-
   return (
     <div
       className="area"

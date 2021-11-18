@@ -50,26 +50,36 @@ function HostInfo( {selectedHost, setSelectedHost, areas, hosts, setHosts} ) {
     // the 'value' attribute is given via Semantic's Dropdown component.
     // Put a debugger or console.log in here and see what the "value" variable is when you pass in different options.
     // See the Semantic docs for more info: https://react.semantic-ui.com/modules/dropdown/#usage-controlled
-    fetch(`http://localhost:3001/hosts/${selectedHost.id}`, {
-      method: "PATCH",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({...selectedHost, area: value})
-    })
-    .then(r => r.json())
-    .then(data => {
-      const updatedHosts = hosts.map(host => {
-        if (host.id === selectedHost.id) {
-          return data
-        }
-        else {
-          return host
-        }
+    const hostsAlreadyInArea = hosts.filter(host => host.area === value)
+    const currentArea = areas.filter(area => area.name === value)
+    if (hostsAlreadyInArea.length >= currentArea[0].limit) {
+      console.log('too many')
+      alert(
+        `HEY!! You got too many hosts in ${capitalizeName(currentArea[0].name)}. The limit for that area is ${currentArea[0].limit}. You gotta fix that!`
+      );
+    }
+    else {
+      fetch(`http://localhost:3001/hosts/${selectedHost.id}`, {
+        method: "PATCH",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({...selectedHost, area: value})
       })
-      setHosts(updatedHosts)
-      setSelectedHost(data)
-    })
+      .then(r => r.json())
+      .then(data => {
+        const updatedHosts = hosts.map(host => {
+          if (host.id === selectedHost.id) {
+            return data
+          }
+          else {
+            return host
+          }
+        })
+        setHosts(updatedHosts)
+        setSelectedHost(data)
+      })
+    }
   }
 
   function handleRadioChange() {
